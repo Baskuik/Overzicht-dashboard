@@ -6,7 +6,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class UploadsTable
@@ -15,32 +14,24 @@ class UploadsTable
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
-
                 TextColumn::make('user.name')
-                    ->label('User')
-                    ->sortable(),
-
+                    ->searchable(),
                 TextColumn::make('file_name')
-                    ->label('File Name')
-                    ->sortable(),
-
+                    ->searchable(),
                 TextColumn::make('upload_date')
-                    ->label('Upload Date')
-                    ->dateTime()
+                    ->date()
                     ->sortable(),
-
                 TextColumn::make('created_at')
-                    ->label('Created')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('user_id')
-                    ->label('User')
-                    ->relationship('user', 'name'),
+                //
             ])
             ->recordActions([
                 EditAction::make(),

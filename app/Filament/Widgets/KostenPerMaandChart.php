@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class KostenPerMaandChart extends ChartWidget
 {
-    protected static ?string $heading = 'Kosten per maand';
+    protected ?string $heading = 'Kosten per maand';
     protected static ?int $sort = 2;
 
     protected function getData(): array
