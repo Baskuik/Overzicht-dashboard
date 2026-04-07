@@ -5,9 +5,6 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('records', function (Blueprint $table) {
@@ -16,16 +13,13 @@ return new class extends Migration {
             $table->string('action');
             $table->text('description')->nullable();
             $table->string('employee_name');
-            $table->integer('duration')->nullable(); // in minutes
-            $table->decimal('cost', 8, 2)->nullable();
-            $table->date('date')->nullable();
+            $table->decimal('duration', 8, 2)->nullable(); // in uren
+            $table->decimal('cost', 10, 2)->nullable();
+            $table->date('date');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('records');
