@@ -6,7 +6,6 @@ use App\Models\Record;
 use App\Models\Upload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\RecordsImport;
 
 class UploadController extends Controller
@@ -28,7 +27,8 @@ class UploadController extends Controller
         ]);
 
         // Excel verwerken
-        Excel::import(new RecordsImport($upload->id), $file);
+        $importer = new RecordsImport($upload->id);
+        $importer->import($file->getRealPath());
 
         return redirect()->back()->with('success', "Bestand '{$fileName}' succesvol geüpload!");
     }
