@@ -17,7 +17,7 @@ class DashboardController extends Controller
             'total_actions' => $records->count(),
             'total_cost' => $records->sum('cost'),
             'avg_duration' => (int) $avg_duration,
-            'total_employees' => $records->distinct('employee_name')->count(),
+            'total_employees' => $records->pluck('employee_name')->unique()->count(),
         ];
 
         // Chart data
