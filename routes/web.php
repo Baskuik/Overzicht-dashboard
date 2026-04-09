@@ -53,6 +53,9 @@ Route::post('/register', function (Illuminate\Http\Request $request) {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/upload', function () {
+        return redirect()->route('dashboard');
+    })->name('upload');
     Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
 
     Route::post('/logout', function () {

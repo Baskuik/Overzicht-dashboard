@@ -35,15 +35,15 @@ class DashboardController extends Controller
         ];
 
         // Kosten per maand data
-        $kostenPerMaand = Record::query()
-            ->select(
-                DB::raw("DATE_FORMAT(date, '%Y-%m') as maand"),
-                DB::raw('SUM(cost) as totaal')
-            )
-            ->groupBy('maand')
-            ->orderBy('maand')
-            ->get()
-            ->mapWithKeys(fn($item) => [$item->maand => $item->totaal])
+        $kostenPerMaand = $records
+            ->filter(fn($record) => $record->cost !== null)
+            ->groupBy(function ($record) {
+                return $record->date?->format('Y-m') ?? now()->format('Y-m');
+            })
+            ->mapWithKeys(function ($group) {
+                return [$group->first()->date?->format('Y-m') ?? now()->format('Y-m') => round($group->sum('cost'), 2)];
+            })
+            ->sortKeys()
             ->toArray();
 
         return view('dashboard', [

@@ -89,13 +89,46 @@ class RecordsImport
 
     /**
      * Parse numeric field, handle null and string values
+     * Supports both Dutch (1.234,56) and English (1234.56) formats
      */
     private function parseNumericField(mixed $value): ?float
     {
-        if (empty($value) || !is_numeric($value)) {
+        if (empty($value)) {
             return null;
         }
 
-        return (float) $value;
+        // Convert to string and trim whitespace
+        $value = trim((string) $value);
+
+        if (empty($value)) {
+            return null;
+        }
+
+        // If it's already numeric, return it
+        if (is_numeric($value)) {
+            return (float) $value;
+        }
+
+        // Handle Dutch format (1.234,56) - comma is decimal separator
+        if (strpos($value, ',') !== false && strpos($value, '.') !== false) {
+            // Has both comma and dot - determine which is thousands separator
+            $lastComma = strrpos($value, ',');
+            $lastDot = strrpos($value, '.');
+
+            if ($lastComma > $lastDot) {
+                // Dutch format: 1.234,56
+                $value = str_replace('.', '', $value);
+                $value = str_replace(',', '.', $value);
+            } else {
+                // English format: 1,234.56
+                $value = str_replace(',', '', $value);
+            }
+        } elseif (strpos($value, ',') !== false) {
+            // Only comma - could be decimal separator
+            $value = str_replace(',', '.', $value);
+        }
+
+        $numeric = (float) $value;
+        return $numeric > 0 ? $numeric : null;
     }
 }

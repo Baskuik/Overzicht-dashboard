@@ -80,8 +80,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('upload.store') }}" method="POST" enctype="multipart/form-data"
-                    class="space-y-6">
+                <form action="/upload" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     <div>
                         <label for="file" class="block text-sm font-medium text-gray-300 mb-4">
